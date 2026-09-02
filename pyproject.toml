@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lungseg"
+version = "0.1.0"
+description = "Lung region extraction from chest CT slices: classical CV, U-Net and a hybrid of the two"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "opencv-python-headless>=4.8",
+    "scikit-image>=0.21",
+    "scipy>=1.10",
+    "torch>=2.0",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+kaggle = ["kagglehub>=0.3"]
+dicom = ["pydicom>=2.4"]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+lungseg = "lungseg.cli:main"
+
+[tool.setuptools]
+packages = ["lungseg"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

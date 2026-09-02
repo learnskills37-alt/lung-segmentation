@@ -1,0 +1,10 @@
+numpy>=1.24
+opencv-python-headless>=4.8
+scikit-image>=0.21
+scipy>=1.10
+torch>=2.0
+matplotlib>=3.7
+kagglehub>=0.3
+
+# Optional: only needed when the dataset ships DICOM (.dcm) slices
+# pydicom>=2.4
