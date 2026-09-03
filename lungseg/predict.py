@@ -15,7 +15,7 @@ from .io_utils import load_image, save_image, save_mask
 from .nodules import detect_nodule_candidates
 from .train import resolve_device
 from .unet import UNet
-from .visualize import draw_candidates, overlay_mask, save_panel
+from .visualize import contact_sheet, draw_candidates, overlay_mask, result_figure, save_panel
 
 
 class UNetPredictor:
@@ -60,6 +60,7 @@ def predict_paths(
     threshold: float = 0.5,
     detect_nodules: bool = False,
     save_overlays: bool = True,
+    max_sheet_slices: int = 12,
     verbose: bool = True,
 ) -> list[dict]:
     output_dir = Path(output_dir)
@@ -67,9 +68,11 @@ def predict_paths(
     (output_dir / "lung_regions").mkdir(parents=True, exist_ok=True)
     if save_overlays:
         (output_dir / "overlays").mkdir(parents=True, exist_ok=True)
+        (output_dir / "results").mkdir(parents=True, exist_ok=True)
 
     records: list[dict] = []
     nodule_rows: list[dict] = []
+    figures: list[np.ndarray] = []
 
     for index, path in enumerate(image_paths):
         image = load_image(path)
@@ -90,6 +93,11 @@ def predict_paths(
                 panel = draw_candidates(panel, candidates)
             save_panel(output_dir / "overlays" / f"{stem}.png", panel)
 
+            figure = result_figure(image, result.mask, candidates, label=stem)
+            save_panel(output_dir / "results" / f"{stem}.png", figure)
+            if len(figures) < max_sheet_slices:
+                figures.append(figure)
+
         records.append(
             {
                 "image": str(path),
@@ -103,6 +111,8 @@ def predict_paths(
         if verbose and (index + 1) % 50 == 0:
             print(f"  segmented {index + 1}/{len(image_paths)} slices")
 
+    if figures:
+        save_panel(output_dir / "contact_sheet.png", contact_sheet(figures))
     _write_csv(output_dir / "predictions.csv", records)
     if detect_nodules:
         _write_csv(output_dir / "nodule_candidates.csv", nodule_rows)

@@ -25,12 +25,20 @@ On the synthetic validation set this ordering holds — the hybrid beats both pa
 
 | method    |   Dice |    IoU | Precision | Recall | HD95 |
 |-----------|-------:|-------:|----------:|-------:|-----:|
-| classical | 0.9911 | 0.9824 |    0.9832 | 0.9991 | 1.00 |
+| classical | 0.9910 | 0.9822 |    0.9830 | 0.9992 | 1.00 |
 | U-Net     | 0.9969 | 0.9939 |    0.9942 | 0.9996 | 0.92 |
-| hybrid    | 0.9977 | 0.9954 |    0.9957 | 0.9997 | 0.45 |
+| hybrid    | 0.9977 | 0.9954 |    0.9957 | 0.9997 | 0.47 |
 
 (`lungseg demo`, 60 train / 15 validation phantoms, 20 epochs on CPU. Reproduce with the
-demo command below; real CT numbers will be lower.)
+demo command below.)
+
+**Phantoms flatter the classical stage badly, so do not read those numbers as real
+performance.** Checked against 8 real annotated axial chest CT slices, the classical stage
+scored Dice 0.29 where it scores 0.99 on phantoms — five of the eight returned an empty
+mask. Fixing that (see *Display windowing* below) brought it to **0.865** mean Dice on the
+same slices, at 0.979 precision / 0.794 recall. Phantoms are useful as a fast, dependency-
+free regression harness; they are not a substitute for validating on your own data, which
+is what `lungseg evaluate` is for.
 
 ## Install
 
@@ -97,8 +105,10 @@ print("Path to dataset files:", path)
 
 | path | contents |
 |---|---|
+| **`lung_regions/`** | **the extracted lung region: the original slice with everything outside the lungs blanked** |
+| `results/` | three-panel figure per slice — input, detected field, extracted region |
+| `contact_sheet.png` | the first 12 result figures on one reviewable sheet |
 | `masks/` | binary lung mask (PNG) |
-| `lung_regions/` | original slice with everything outside the lungs blanked |
 | `overlays/` | mask overlay, with nodule candidates circled if `--nodules` |
 | `predictions.csv` | fusion mode used, classical confidence, lung area fraction |
 | `nodule_candidates.csv` | position, radius, intensity, circularity, score |
@@ -107,11 +117,21 @@ print("Path to dataset files:", path)
 
 ### 1. Classical stage (`lungseg/classical.py`)
 
-Denoise → Otsu split into air and tissue → body mask (largest filled tissue component)
-→ air regions inside the body, with frame-touching components dropped → keep the up-to-two
-largest regions that are comparable in size, which excludes the trachea → repair.
+Denoise → body mask (largest filled tissue component) → air regions inside the body, with
+frame-touching components dropped → keep the up-to-two largest regions that are comparable
+in size, which excludes the trachea → repair.
 
-Two repair steps matter more than they look:
+**Display windowing.** The threshold is not a fixed rule, because an image dataset carries
+whatever intensity mapping its exporter chose — the same anatomy lands near black under a
+lung window and at mid-grey under a soft-tissue window or per-image autoscaling. A single
+global Otsu is dominated by the large air background: it splits background from body, which
+leaves parenchyma on the *tissue* side of the threshold and finds no lungs at all. This is
+what produced the 0.29 Dice above. Instead the mask is built at each of three meaningful
+thresholds — the global Otsu, plus Otsu and 3-class multi-Otsu computed inside the body
+mask — and the best-scoring result wins. (Arbitrary quantile candidates were tried here
+too; they never won except by noise, and cost phantom accuracy, so they were dropped.)
+
+Three repair steps matter more than they look:
 
 - **Per-component closing.** Closing the mask as a whole bridges the mediastinum on slices
   where the fields sit close together, which then breaks the hull repair below. Each field
@@ -122,9 +142,17 @@ Two repair steps matter more than they look:
   compact indentations are added back; the large mediastinal concavity fails the area test
   and thin slivers fail the fill test. On the phantoms this lifts nodule retention from
   50/75 to 70/75 for a 0.002 Dice cost.
+- **Boundary contrast in the score.** Geometry alone cannot tell a correct lung field from
+  one that has spilled into the chest wall — both look plausibly sized and placed, and on
+  real CT the score rated a mask with 0.35 precision at 0.97 confidence. The score now also
+  measures how sharply intensity steps across the mask boundary. It compares thin bands
+  either side of the edge rather than whole-region means, because a regional mean is
+  lowered by bright nodules inside the field and would reward carving them out.
 
-Each mask gets a confidence score from its area fraction, left/right balance, component
-count and centroid position. Everything downstream keys off that score.
+Each mask gets a confidence score from its boundary contrast, area fraction, left/right
+balance, component count and centroid position. That score both selects the threshold and
+gates everything downstream, so a slice the stage cannot handle is flagged rather than
+silently wrong.
 
 ### 2. U-Net (`lungseg/unet.py`)
 
@@ -170,10 +198,10 @@ falls back to pseudo-labels automatically.
 pip install pytest && python -m pytest tests -q
 ```
 
-27 tests covering the classical stage (including degenerate inputs, mediastinum separation
-and juxtapleural recovery), fusion modes, metrics, I/O round-trips, the U-Net's shape
-handling and a full train → predict round-trip. They run on synthetic phantoms, so no
-dataset download is required.
+29 tests covering the classical stage (degenerate inputs, alternate display windowing,
+mediastinum separation, juxtapleural recovery), fusion modes, metrics, I/O round-trips,
+result figures, the U-Net's shape handling and a full train → predict round-trip. They run
+on synthetic phantoms, so no dataset download is required.
 
 ## Layout
 

@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import pytest
+from scipy import ndimage as ndi
+from skimage.filters import threshold_otsu
 
 from lungseg.classical import crop_to_mask, extract_lung_fields, extract_lung_region
 from lungseg.metrics import dice
@@ -39,6 +41,32 @@ def test_closing_does_not_bridge_the_two_lungs():
     result = extract_lung_fields(image)
     labels = cv2.connectedComponents(result.mask, connectivity=8)[0] - 1
     assert labels == 2, "the mediastinum must keep the fields separate"
+
+
+def soft_tissue_window(image: np.ndarray) -> np.ndarray:
+    """Re-map a phantom the way a soft-tissue window would: parenchyma lands at mid-grey
+    instead of near-black, while the air outside the patient stays dark."""
+    body = ndi.binary_fill_holes(image > 0.03)
+    return np.where(body, 0.45 + 0.55 * image, image).astype(np.float32)
+
+
+def test_survives_a_display_window_that_puts_parenchyma_at_mid_grey():
+    """An image dataset carries whatever window its exporter chose.
+
+    A single global Otsu is dominated by the dark air background and splits background
+    from body, leaving parenchyma on the tissue side of the threshold and the lungs
+    unfound; the search over intra-body thresholds is what keeps this case working.
+    """
+    image, reference, _ = make_phantom(256, np.random.default_rng(0), n_nodules=2)
+    windowed = soft_tissue_window(image)
+
+    assert windowed[reference > 0].mean() > 0.4, "parenchyma should be mid-grey here"
+    global_split = (windowed <= threshold_otsu(windowed)).astype(np.uint8)
+    assert dice(global_split, reference) < 0.2, "a single global threshold must fail this case"
+
+    result = extract_lung_fields(windowed)
+    assert dice(result.mask, reference) > 0.85
+    assert result.score > 0.5
 
 
 @pytest.mark.parametrize(

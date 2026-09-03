@@ -40,6 +40,46 @@ def draw_candidates(canvas: np.ndarray, candidates, color: tuple[int, int, int] 
     return canvas
 
 
+def result_figure(
+    image: np.ndarray,
+    mask: np.ndarray,
+    candidates=None,
+    label: str | None = None,
+) -> np.ndarray:
+    """The deliverable strip for one slice: input, detected field, extracted lung region."""
+    from .classical import extract_lung_region
+
+    outlined = overlay_mask(image, mask)
+    if candidates:
+        outlined = draw_candidates(outlined, candidates)
+    extracted = to_bgr(extract_lung_region(image, mask))
+
+    panels = [to_bgr(image), outlined, extracted]
+    titles = ["input slice", "lung field", "extracted region"]
+    for panel, title in zip(panels, titles):
+        cv2.putText(panel, title, (6, 18), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1, cv2.LINE_AA)
+    figure = np.hstack(panels)
+    if label:
+        cv2.putText(figure, label, (6, figure.shape[0] - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (180, 180, 180), 1, cv2.LINE_AA)
+    return figure
+
+
+def contact_sheet(figures: list[np.ndarray], columns: int = 2) -> np.ndarray:
+    """Stack per-slice result strips into one reviewable sheet."""
+    if not figures:
+        return np.zeros((1, 1, 3), np.uint8)
+    height = min(f.shape[0] for f in figures)
+    width = min(f.shape[1] for f in figures)
+    tiles = [cv2.resize(f, (width, height)) for f in figures]
+    rows = []
+    for start in range(0, len(tiles), columns):
+        row = tiles[start : start + columns]
+        while len(row) < columns:
+            row.append(np.zeros_like(tiles[0]))
+        rows.append(np.hstack(row))
+    return np.vstack(rows)
+
+
 def comparison_panel(
     image: np.ndarray,
     masks: dict[str, np.ndarray],

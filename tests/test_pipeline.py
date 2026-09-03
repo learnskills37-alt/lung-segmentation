@@ -117,6 +117,24 @@ def test_nodule_detector_returns_nothing_for_an_empty_mask():
     assert detect_nodule_candidates(image, np.zeros_like(image, np.uint8)) == []
 
 
+def test_result_figure_shows_input_field_and_extracted_region():
+    from lungseg.visualize import contact_sheet, result_figure
+
+    image, reference, _ = make_phantom(96, np.random.default_rng(2), n_nodules=1)
+    figure = result_figure(image, reference, label="slice")
+    assert figure.shape == (96, 96 * 3, 3), "three side-by-side panels"
+
+    # The extracted-region panel keeps the lungs and blanks everything else.
+    # Row 0-23 carries the caption, so compare below it.
+    extracted = figure[24:, 96 * 2 :, 0]
+    outside = reference[24:] == 0
+    assert extracted[outside].max() <= 40, "background outside the lungs is blanked"
+    assert extracted[reference[24:] > 0].mean() > 0
+
+    sheet = contact_sheet([figure, figure, figure], columns=2)
+    assert sheet.shape == (96 * 2, 96 * 3 * 2, 3), "3 figures pad out to a 2x2 sheet"
+
+
 def test_metrics_on_identical_and_disjoint_masks():
     mask = np.zeros((16, 16), np.uint8)
     mask[4:12, 4:12] = 1
