@@ -51,6 +51,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_predict.add_argument("--mode", default="hybrid", choices=["hybrid", "unet", "classical", "union", "intersection"])
     p_predict.add_argument("--threshold", type=float, default=0.5)
     p_predict.add_argument("--nodules", action="store_true", help="Also detect nodule candidates")
+    p_predict.add_argument(
+        "--crop", action="store_true", help="Trim each extracted region to the lung bounding box"
+    )
     p_predict.add_argument("--no-overlays", action="store_true")
     p_predict.add_argument("--limit", type=int, default=None)
     _add_common(p_predict)
@@ -174,6 +177,7 @@ def _cmd_predict(args) -> int:
         threshold=args.threshold,
         detect_nodules=args.nodules,
         save_overlays=not args.no_overlays,
+        crop_to_lungs=args.crop,
     )
     print(f"segmented {len(records)} slices -> {args.out}")
     return 0

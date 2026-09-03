@@ -85,6 +85,10 @@ python -m lungseg predict <data_dir> \
     --out outputs/predictions --mode hybrid --nodules
 ```
 
+The extracted lung images land in `outputs/predictions/lung_regions/`, one PNG per input
+slice. Pass `--crop` to trim each to the lung bounding box, and `--no-overlays` to skip
+the annotated figures if you only want the plain extractions.
+
 If the dataset ships reference masks, score every stage against them:
 
 ```bash
@@ -105,7 +109,7 @@ print("Path to dataset files:", path)
 
 | path | contents |
 |---|---|
-| **`lung_regions/`** | **the extracted lung region: the original slice with everything outside the lungs blanked** |
+| **`lung_regions/`** | **the extracted lung region: the original slice with everything outside the lungs blanked. One PNG per input slice — this is the deliverable.** Add `--crop` to trim each one to the lung bounding box instead of keeping the original frame. |
 | `results/` | three-panel figure per slice — input, detected field, extracted region |
 | `contact_sheet.png` | the first 12 result figures on one reviewable sheet |
 | `masks/` | binary lung mask (PNG) |

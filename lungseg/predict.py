@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 import torch
 
-from .classical import extract_lung_region
+from .classical import crop_to_mask, extract_lung_region
 from .hybrid import segment_slice
 from .io_utils import load_image, save_image, save_mask
 from .nodules import detect_nodule_candidates
@@ -60,6 +60,7 @@ def predict_paths(
     threshold: float = 0.5,
     detect_nodules: bool = False,
     save_overlays: bool = True,
+    crop_to_lungs: bool = False,
     max_sheet_slices: int = 12,
     verbose: bool = True,
 ) -> list[dict]:
@@ -80,7 +81,10 @@ def predict_paths(
         stem = path.stem
 
         save_mask(output_dir / "masks" / f"{stem}.png", result.mask)
-        save_image(output_dir / "lung_regions" / f"{stem}.png", extract_lung_region(image, result.mask))
+        region = extract_lung_region(image, result.mask)
+        if crop_to_lungs and result.mask.any():
+            region = crop_to_mask(region, result.mask)[0]
+        save_image(output_dir / "lung_regions" / f"{stem}.png", region)
 
         candidates = []
         if detect_nodules:
