@@ -1,0 +1,32 @@
+{
+  "case": "coronacases_002",
+  "model": "TotalSegmentator: 3D nnU-Net, 3 mm fast model",
+  "input_sha256": "6dff8d1b5d16ea135c3133e04ebad73933b3db46be8dfe1eabac271b496006ee",
+  "mask_sha256": "ad94b954a0676b844e1ef1aa433c9df668672e6460064bd81cfba460b0ddde29",
+  "shape_xyz": [
+    512,
+    512,
+    200
+  ],
+  "device": "cpu",
+  "threads": 6,
+  "inference_wall_seconds_including_model_loading": 17.06295120799996,
+  "single_process_io": true,
+  "nnunet_aggregation": "FP32 CPU",
+  "versions": {
+    "torch": "2.14.0+cpu",
+    "lungmask": "0.2.21",
+    "TotalSegmentator": "2.18.0",
+    "nnunetv2": "2.8.1",
+    "nibabel": "5.4.2"
+  },
+  "metrics": {
+    "dice": 0.9727056308412174,
+    "iou": 0.9468616397048237,
+    "precision": 0.9764601776393432,
+    "recall": 0.968979846356711
+  },
+  "reference_sha256": "ce08b62f68f89c9387cb2894ac47596e005fbbcb58e8574ac70cae01d3f2ef2b",
+  "exported_full_frame_slices": 200,
+  "exported_cropped_slices": 176
+}

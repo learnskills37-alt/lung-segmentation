@@ -1,5 +1,9 @@
 # Lung Region Extraction from Chest CT
 
+**Actual pretrained deep-learning results:** see [automatic CT lung extraction](automatic_ct/README.md)
+for two automatic models executed on a complete real CT volume, measured Dice/IoU,
+and original CT / predicted mask / extracted lung-region / cropped-lung images.
+
 Extracts the lung fields from chest CT slices using three interchangeable stages —
 a classical computer-vision segmenter, a U-Net, and a hybrid that fuses them — plus an
 optional nodule-candidate detector that runs inside the extracted region.

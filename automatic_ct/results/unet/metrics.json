@@ -1,0 +1,31 @@
+{
+  "case": "coronacases_002",
+  "model": "lungmask R231: 2D U-Net",
+  "input_sha256": "6dff8d1b5d16ea135c3133e04ebad73933b3db46be8dfe1eabac271b496006ee",
+  "mask_sha256": "e2311c010fd18f6db9013afbb681afbdd60433506d23bb0e0bd3fefbdd10dc66",
+  "shape_xyz": [
+    512,
+    512,
+    200
+  ],
+  "device": "cpu",
+  "threads": 6,
+  "inference_wall_seconds_including_model_loading": 105.561588067,
+  "single_process_io": false,
+  "versions": {
+    "torch": "2.14.0+cpu",
+    "lungmask": "0.2.21",
+    "TotalSegmentator": "2.18.0",
+    "nnunetv2": "2.8.1",
+    "nibabel": "5.4.2"
+  },
+  "metrics": {
+    "dice": 0.9823838012548133,
+    "iou": 0.9653775190156975,
+    "precision": 0.9786217185151614,
+    "recall": 0.9861749205162792
+  },
+  "reference_sha256": "ce08b62f68f89c9387cb2894ac47596e005fbbcb58e8574ac70cae01d3f2ef2b",
+  "exported_full_frame_slices": 200,
+  "exported_cropped_slices": 178
+}

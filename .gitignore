@@ -15,3 +15,6 @@ data/
 .pytest_cache/
 .ipynb_checkpoints/
 .DS_Store
+.venv-automatic/
+model_cache/
+example_data/
