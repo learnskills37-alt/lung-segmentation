@@ -1,5 +1,8 @@
 # Actual CT → deep-learning lung masks → lung-region images
 
+**Current dataset: [LIDC-IDRI — Python workflow and actual lung-region results](LIDC_IDRI.md).**
+The CoronaCases example and accuracy scores below are retained as a separate prior run.
+
 This addition runs **pretrained automatic deep-learning models** on a real CT volume.
 Neither model receives manual prompts or reference masks during prediction.
 

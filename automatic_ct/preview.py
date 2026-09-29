@@ -35,7 +35,7 @@ def main():
                 ax=axes[r,c];ax.imshow(image,cmap='gray',vmin=0,vmax=255)
                 ax.set_title(title,fontsize=11,fontweight='bold');ax.axis('off')
             axes[r,0].text(0.03,0.04,f'Axial slice {z}',transform=axes[r,0].transAxes,color='white')
-        fig.suptitle('CoronaCases 002 | '+metrics['model'],fontsize=14)
+        fig.suptitle(metrics['case']+' | '+metrics['model'],fontsize=14)
         fig.tight_layout();fig.savefig(args.output/filename,dpi=140,bbox_inches='tight',facecolor='white')
         plt.close(fig)
 

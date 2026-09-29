@@ -1,7 +1,7 @@
 """Use nnU-Net's official sequential predictor when multiprocessing is unavailable.
 
-This changes I/O scheduling only; it retains the pretrained model, preprocessing,
-sliding-window inference, and output resampling implemented upstream.
+Uses sequential I/O and FP32 CPU window accumulation; retains pretrained weights,
+preprocessing, window locations, mirroring, Gaussian weighting, and resampling.
 """
 
 

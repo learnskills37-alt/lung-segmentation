@@ -3,3 +3,4 @@ lungmask==0.2.21
 TotalSegmentator==2.18.0
 nibabel==5.4.2
 matplotlib==3.11.2
+idc-index==0.12.5
