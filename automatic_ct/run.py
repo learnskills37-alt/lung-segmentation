@@ -27,7 +27,13 @@ def installed_versions():
     return result
 
 
-def export_regions(ct_path, mask_path, destination):
+def middle_indices(n, count=10):
+    if count < 1 or n < count:
+        raise ValueError("Insufficient slices")
+    return list(range((n-count)//2, (n-count)//2+count))
+
+
+def export_regions(ct_path, mask_path, destination, middle_slices=None):
     import nibabel as nib
     import numpy as np
     from PIL import Image
@@ -41,7 +47,10 @@ def export_regions(ct_path, mask_path, destination):
     for d in directories:
         d.mkdir(parents=True, exist_ok=True)
     rows = []
-    for z in range(ct.shape[2]):
+    indices = middle_indices(ct.shape[2], middle_slices) if middle_slices else range(ct.shape[2])
+    if middle_slices:
+        (destination / "ct_png").mkdir(exist_ok=True)
+    for z in indices:
         # Radiological axial display, anterior up; no intensity changes inside mask
         # other than the declared fixed CT display window (-1000 to 400 HU).
         hu = ct[:, :, z].T[::-1, ::-1]
@@ -49,6 +58,8 @@ def export_regions(ct_path, mask_path, destination):
         display = np.rint(np.clip((hu + 1000) / 1400, 0, 1) * 255).astype(np.uint8)
         extracted = np.where(binary, display, 0).astype(np.uint8)
         name = f'slice_{z:03d}.png'
+        if middle_slices:
+            Image.fromarray(display).save(destination / 'ct_png' / name)
         Image.fromarray(binary.astype(np.uint8) * 255).save(directories[0] / name)
         Image.fromarray(extracted).save(directories[1] / name)
         record = {'slice': z, 'lung_pixels': int(binary.sum()), 'has_crop': False,
@@ -74,10 +85,13 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--cache', type=Path, default=Path('model_cache'))
     parser.add_argument('--threads', type=int, default=6)
+    parser.add_argument('--middle-slices', type=int)
     parser.add_argument('--single-process', action='store_true', help='Sequential nnU-Net I/O for restricted CPU environments')
     args = parser.parse_args()
     if args.threads < 1:
         parser.error('--threads must be positive')
+    if args.middle_slices is not None and args.middle_slices < 1:
+        parser.error('--middle-slices must be positive')
     args.output.mkdir(parents=True, exist_ok=True)
     args.cache = args.cache.resolve(); args.cache.mkdir(parents=True, exist_ok=True)
     os.environ['TORCH_HOME'] = str(args.cache / 'torch')
@@ -151,7 +165,10 @@ def main():
                            'precision': intersection/a if a else 0.,
                            'recall': intersection/b if b else 0.}
         info['reference_sha256'] = digest(args.reference)
-    count, cropped = export_regions(args.ct, output, args.output)
+    count, cropped = export_regions(args.ct, output, args.output, args.middle_slices)
+    if args.middle_slices:
+        info["exported_slice_indices"] = middle_indices(nib.as_closest_canonical(ct).shape[2], args.middle_slices)
+        info["selection"] = "10 central consecutive canonical axial slices; floor((N-10)/2)"
     info['exported_full_frame_slices'] = count
     info['exported_cropped_slices'] = cropped
     (args.output / 'metrics.json').write_text(json.dumps(info, indent=2)+'\n')

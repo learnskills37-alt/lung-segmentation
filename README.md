@@ -1,5 +1,7 @@
 # Lung Region Extraction from Chest CT
 
+**Middle-10 sampling:** [folder inventory and batch workflow](automatic_ct/MIDDLE10.md).
+
 **Current dataset: [LIDC-IDRI](automatic_ct/LIDC_IDRI.md).** Includes original DICOM
 download, automatic U-Net and nnU-Net inference, binary lung masks, lung-only
 images, cropped views, and actual results from the complete LIDC-IDRI-0001 CT.

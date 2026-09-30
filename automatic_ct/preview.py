@@ -19,6 +19,9 @@ def main():
     volume = nib.as_closest_canonical(nib.load(args.ct)).get_fdata(dtype=np.float32)
     metrics = json.loads((args.results / 'metrics.json').read_text())
     indices = [int(round((volume.shape[2]-1)*f)) for f in [0.25,0.5,0.75]]
+    selected = metrics.get("exported_slice_indices")
+    if selected:
+        indices = [selected[0], selected[len(selected)//2], selected[-1]]
     args.output.mkdir(parents=True, exist_ok=True)
     for filename, selected in [('lung_region_preview.png', [indices[1]]),
                                ('three_slice_preview.png', indices)]:
@@ -31,7 +34,7 @@ def main():
                     ('Original CT',ct),
                     ('Predicted lung mask',np.asarray(Image.open(args.results/'masks_png'/name))),
                     ('Extracted lung region',np.asarray(Image.open(args.results/'lung_regions'/name))),
-                    ('Cropped lung region',np.asarray(Image.open(args.results/'lung_regions_cropped'/name)))]):
+                    ('Cropped lung region',np.asarray(Image.open(args.results/'lung_regions_cropped'/name)) if (args.results/'lung_regions_cropped'/name).exists() else np.zeros((1,1),dtype=np.uint8))]):
                 ax=axes[r,c];ax.imshow(image,cmap='gray',vmin=0,vmax=255)
                 ax.set_title(title,fontsize=11,fontweight='bold');ax.axis('off')
             axes[r,0].text(0.03,0.04,f'Axial slice {z}',transform=axes[r,0].transAxes,color='white')

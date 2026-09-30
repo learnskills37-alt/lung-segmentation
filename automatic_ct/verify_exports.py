@@ -22,10 +22,14 @@ def main():
     ct = nib.as_closest_canonical(ct_image).get_fdata(dtype=np.float32)
     masks = nib.as_closest_canonical(mask_image).get_fdata(dtype=np.float32) > 0
     rows = list(csv.DictReader((args.results / 'slice_index.csv').open()))
-    if len(rows) != ct.shape[2]:
+    meta = json.loads((args.results / "metrics.json").read_text())
+    indices = meta.get("exported_slice_indices", list(range(ct.shape[2])))
+    if len(rows) != len(indices) or indices != sorted(set(indices)):
         raise ValueError('Missing slice index rows')
     crops = 0
-    for z in range(ct.shape[2]):
+    for row, z in zip(rows, indices):
+        if not 0 <= z < ct.shape[2]:
+            raise ValueError("Invalid slice index")
         name = f'slice_{z:03d}.png'
         binary = masks[:, :, z].T[::-1, ::-1]
         hu = ct[:, :, z].T[::-1, ::-1]
@@ -36,7 +40,9 @@ def main():
         if not np.array_equal(np.asarray(Image.open(args.results / 'lung_regions' / name)), expected):
             raise ValueError(f'Incorrect extracted image: {name}')
         crop_path = args.results / 'lung_regions_cropped' / name
-        row = rows[z]
+        if "exported_slice_indices" in meta:
+            if not np.array_equal(np.asarray(Image.open(args.results / "ct_png" / name)), window):
+                raise ValueError("Original CT display pixels differ")
         if int(row['slice']) != z or int(row['lung_pixels']) != int(binary.sum()):
             raise ValueError(f'Incorrect slice index: {name}')
         if binary.any():
@@ -51,11 +57,11 @@ def main():
             crops += 1
         elif crop_path.exists() or row['has_crop'] != 'False':
             raise ValueError(f'Unexpected crop for empty slice: {name}')
-    for folder, expected_count in [('masks_png', ct.shape[2]), ('lung_regions', ct.shape[2]), ('lung_regions_cropped', crops)]:
+    for folder, expected_count in [('masks_png', len(indices)), ('lung_regions', len(indices)), ('lung_regions_cropped', crops)]:
         if len(list((args.results / folder).glob('*.png'))) != expected_count:
             raise ValueError(f'Unexpected file count in {folder}; use an empty output directory')
-    report = {'status': 'passed', 'mask_slices_checked': ct.shape[2],
-              'lung_region_slices_checked': ct.shape[2], 'cropped_views_checked': crops,
+    report = {'status': 'passed', 'mask_slices_checked': len(indices),
+              'lung_region_slices_checked': len(indices), 'cropped_views_checked': crops,
               'checks': ['binary masks', 'NIfTI grid and affine', 'every PNG pixel', 'crop coordinates', 'file counts'],
               'scope': 'Export integrity only; not anatomical accuracy validation.'}
     (args.results / 'export_validation.json').write_text(json.dumps(report, indent=2)+'\n')

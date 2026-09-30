@@ -1,5 +1,7 @@
 # LIDC-IDRI: automatic whole-lung masks and lung-region images
 
+**Middle-10 sampling:** [folder inventory and batch workflow](MIDDLE10.md).
+
 The current dataset is **LIDC-IDRI**, obtained as original DICOM images through
 [NCI Imaging Data Commons](https://portal.imaging.datacommons.cancer.gov/collections/lidc_idri/).
 The executed example is **LIDC-IDRI-0001**, one complete **512 × 512 × 133** CT
