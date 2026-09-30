@@ -1,0 +1,14 @@
+{
+  "queried_utc": "2026-09-30T05:01:53.824157+00:00",
+  "idc_index": "0.12.5",
+  "patient_folders": 1010,
+  "ct_series_folders": 1018,
+  "eligible_patient_folders": 1010,
+  "eligible_ct_series": 1018,
+  "images_one_series_per_patient": 10100,
+  "images_all_series": 10180,
+  "full_ct_download_GB": 128.405916114,
+  "qualification": "Catalog CT series with >=10 instances; geometry verified after download.",
+  "series_selection": "Lexicographically first eligible SeriesInstanceUID per patient.",
+  "middle_selection": "start=floor((N-10)/2); 10 consecutive canonical axial slices."
+}

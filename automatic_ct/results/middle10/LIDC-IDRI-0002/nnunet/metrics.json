@@ -1,0 +1,38 @@
+{
+  "case": "LIDC-IDRI-0002",
+  "model": "TotalSegmentator: 3D nnU-Net, 3 mm fast model",
+  "input_sha256": "952c0cfe229d33ed99cc6f763f85f2092fa3a56c609297e1bc2aa319823ac7f5",
+  "mask_sha256": "838c73f1378614c4557757e3af263a0b21d60b806b8fd271b01a1a6ad449fbd5",
+  "shape_xyz": [
+    512,
+    512,
+    261
+  ],
+  "device": "cpu",
+  "threads": 6,
+  "inference_wall_seconds_including_model_loading": 14.264401958000008,
+  "single_process_io": true,
+  "nnunet_aggregation": "FP32 CPU",
+  "versions": {
+    "torch": "2.14.0+cpu",
+    "lungmask": "0.2.21",
+    "TotalSegmentator": "2.18.0",
+    "nnunetv2": "2.8.1",
+    "nibabel": "5.4.2"
+  },
+  "exported_slice_indices": [
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134
+  ],
+  "selection": "central consecutive canonical axial slices; floor((N-count)/2)",
+  "exported_full_frame_slices": 10,
+  "exported_cropped_slices": 10
+}

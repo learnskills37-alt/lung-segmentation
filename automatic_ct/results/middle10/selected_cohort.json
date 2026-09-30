@@ -1,0 +1,212 @@
+[
+  {
+    "PatientID": "LIDC-IDRI-0001",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.179049373636438705059720603192",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.298806137288633453246975630178",
+    "instanceCount": 133,
+    "series_size_MB": 70.018838,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "37cf5cd8-d103-4cd0-a446-960bc0ed92a3",
+    "middle_indices": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0002",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.619372068417051974713149104919",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.490157381160200744295382098329",
+    "instanceCount": 261,
+    "series_size_MB": 137.396696,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "d24a2c63-a8d6-4292-83a6-1db00ae699cc",
+    "middle_indices": [
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0003",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.170706757615202213033480003264",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.101370605276577556143013894866",
+    "instanceCount": 140,
+    "series_size_MB": 73.70409,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "6949b1e0-7a1c-416b-87f6-d682398c8e1b",
+    "middle_indices": [
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0004",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.323541312620128092852212458228",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.191425307197546732281885591780",
+    "instanceCount": 241,
+    "series_size_MB": 126.870638,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "84406d6e-2c80-453e-adcf-f62ca4b0cabf",
+    "middle_indices": [
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0005",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.129007566048223160327836686225",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.190188259083742759886805142125",
+    "instanceCount": 133,
+    "series_size_MB": 70.0207,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "23f7c25c-12d7-4056-9ce8-0a88de899f02",
+    "middle_indices": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0006",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.132817748896065918417924920957",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.324680252006411183918098592500",
+    "instanceCount": 133,
+    "series_size_MB": 70.01563,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "f6605fd5-4361-4178-a1ed-abe2e0ec93dc",
+    "middle_indices": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0007",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.272348349298439120568330857680",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.280315210397549164238230581781",
+    "instanceCount": 145,
+    "series_size_MB": 76.335464,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "7fb122f9-cd57-4bdc-b6bf-43b359a71272",
+    "middle_indices": [
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0008",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.774060103415303828812229821954",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.185810436275168701789786930141",
+    "instanceCount": 133,
+    "series_size_MB": 70.020708,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "4ea887ea-5132-4486-bb5c-5dd27e4be1d5",
+    "middle_indices": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0009",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.286061375572911414226912429210",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.225213110794629789874295007045",
+    "instanceCount": 256,
+    "series_size_MB": 134.764046,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "a628c871-59d3-4730-aa08-ac5c8e065d6f",
+    "middle_indices": [
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132
+    ]
+  },
+  {
+    "PatientID": "LIDC-IDRI-0010",
+    "SeriesInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.416701701108520592702405866796",
+    "StudyInstanceUID": "1.3.6.1.4.1.14519.5.2.1.6279.6001.303099231937480740934110243375",
+    "instanceCount": 277,
+    "series_size_MB": 145.824406,
+    "aws_bucket": "idc-open-data",
+    "crdc_series_uuid": "28406006-7bc4-484e-b486-7b5a659e1881",
+    "middle_indices": [
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142
+    ]
+  }
+]

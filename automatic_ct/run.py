@@ -105,6 +105,8 @@ def main():
     ct = nib.load(args.ct)
     if len(ct.shape) != 3:
         raise ValueError('Input must be a 3D HU CT NIfTI volume')
+    if args.middle_slices:
+        middle_indices(nib.as_closest_canonical(ct).shape[2], args.middle_slices)
     output = args.output / 'lung_mask.nii.gz'
     start = time.perf_counter()
     if args.model == 'unet':
@@ -168,7 +170,7 @@ def main():
     count, cropped = export_regions(args.ct, output, args.output, args.middle_slices)
     if args.middle_slices:
         info["exported_slice_indices"] = middle_indices(nib.as_closest_canonical(ct).shape[2], args.middle_slices)
-        info["selection"] = "10 central consecutive canonical axial slices; floor((N-10)/2)"
+        info["selection"] = "central consecutive canonical axial slices; floor((N-count)/2)"
     info['exported_full_frame_slices'] = count
     info['exported_cropped_slices'] = cropped
     (args.output / 'metrics.json').write_text(json.dumps(info, indent=2)+'\n')

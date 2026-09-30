@@ -1,0 +1,38 @@
+{
+  "case": "LIDC-IDRI-0001",
+  "model": "lungmask R231: 2D U-Net",
+  "input_sha256": "5aa8e465babb8faf575a1e5a1648c35b31d6cd323224a646b9f12da60fb93cc7",
+  "mask_sha256": "c407f56ba6745f06a955dbcf0ff3322eb53a2a9069136358b8e1f0a8938f688d",
+  "shape_xyz": [
+    512,
+    512,
+    133
+  ],
+  "device": "cpu",
+  "threads": 6,
+  "inference_wall_seconds_including_model_loading": 56.43159549999996,
+  "single_process_io": false,
+  "nnunet_aggregation": "upstream default",
+  "versions": {
+    "torch": "2.14.0+cpu",
+    "lungmask": "0.2.21",
+    "TotalSegmentator": "2.18.0",
+    "nnunetv2": "2.8.1",
+    "nibabel": "5.4.2"
+  },
+  "exported_slice_indices": [
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "selection": "central consecutive canonical axial slices; floor((N-count)/2)",
+  "exported_full_frame_slices": 10,
+  "exported_cropped_slices": 10
+}

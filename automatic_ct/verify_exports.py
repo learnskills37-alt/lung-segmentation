@@ -57,7 +57,10 @@ def main():
             crops += 1
         elif crop_path.exists() or row['has_crop'] != 'False':
             raise ValueError(f'Unexpected crop for empty slice: {name}')
-    for folder, expected_count in [('masks_png', len(indices)), ('lung_regions', len(indices)), ('lung_regions_cropped', crops)]:
+    counts = [('masks_png', len(indices)), ('lung_regions', len(indices)), ('lung_regions_cropped', crops)]
+    if 'exported_slice_indices' in meta:
+        counts.append(('ct_png', len(indices)))
+    for folder, expected_count in counts:
         if len(list((args.results / folder).glob('*.png'))) != expected_count:
             raise ValueError(f'Unexpected file count in {folder}; use an empty output directory')
     report = {'status': 'passed', 'mask_slices_checked': len(indices),

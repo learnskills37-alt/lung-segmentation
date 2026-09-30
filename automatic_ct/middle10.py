@@ -66,7 +66,7 @@ def download_ct(row, output):
         if not path.exists():
             partial = path.with_suffix('.part');partial.write_bytes(data);partial.replace(path)
         return path
-    with ThreadPoolExecutor(max_workers=6) as pool:
+    with ThreadPoolExecutor(max_workers=24) as pool:
         files = list(pool.map(fetch, objects))
     headers = [pydicom.dcmread(f, stop_before_pixels=True) for f in files]
     if any(str(d.SeriesInstanceUID) != row['SeriesInstanceUID'] or str(d.PatientID) != row['PatientID'] or d.Modality != 'CT' for d in headers):
