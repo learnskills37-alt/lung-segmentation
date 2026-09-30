@@ -1,0 +1,25 @@
+{
+  "case": "LIDC-IDRI-0001",
+  "model": "TotalSegmentator: 3D nnU-Net, 3 mm fast model",
+  "input_sha256": "5aa8e465babb8faf575a1e5a1648c35b31d6cd323224a646b9f12da60fb93cc7",
+  "mask_sha256": "5c94f5f77b6da9d9db61e2c27ccb7c19b2519023007a4ce4b3cccd4f4fa37a26",
+  "shape_xyz": [
+    512,
+    512,
+    133
+  ],
+  "device": "cpu",
+  "threads": 6,
+  "inference_wall_seconds_including_model_loading": 60.680208980999964,
+  "single_process_io": true,
+  "nnunet_aggregation": "FP32 CPU",
+  "versions": {
+    "torch": "2.14.0+cpu",
+    "lungmask": "0.2.21",
+    "TotalSegmentator": "2.18.0",
+    "nnunetv2": "2.8.1",
+    "nibabel": "5.4.2"
+  },
+  "exported_full_frame_slices": 133,
+  "exported_cropped_slices": 105
+}

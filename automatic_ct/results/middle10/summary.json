@@ -1,0 +1,10 @@
+{
+  "patients_completed": 2,
+  "unique_selected_ct_images": 20,
+  "mask_images": 40,
+  "lung_region_images": 40,
+  "cropped_images": 40,
+  "accuracy_metrics": null,
+  "scope": "Convenience cohort; no independent whole-lung reference labels.",
+  "source_validation": "Selected CT slices checked against original DICOM positions and HU pixels."
+}

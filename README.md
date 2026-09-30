@@ -1,5 +1,15 @@
 # Lung Region Extraction from Chest CT
 
+**Middle-10 sampling:** [folder inventory and batch workflow](automatic_ct/MIDDLE10.md).
+
+**Current dataset: [LIDC-IDRI](automatic_ct/LIDC_IDRI.md).** Includes original DICOM
+download, automatic U-Net and nnU-Net inference, binary lung masks, lung-only
+images, cropped views, and actual results from the complete LIDC-IDRI-0001 CT.
+
+**Actual pretrained deep-learning results:** see [automatic CT lung extraction](automatic_ct/README.md)
+for two automatic models executed on a complete real CT volume, measured Dice/IoU,
+and original CT / predicted mask / extracted lung-region / cropped-lung images.
+
 Extracts the lung fields from chest CT slices using three interchangeable stages —
 a classical computer-vision segmenter, a U-Net, and a hybrid that fuses them — plus an
 optional nodule-candidate detector that runs inside the extracted region.

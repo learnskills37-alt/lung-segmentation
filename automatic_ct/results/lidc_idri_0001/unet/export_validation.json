@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "mask_slices_checked": 133,
+  "lung_region_slices_checked": 133,
+  "cropped_views_checked": 105,
+  "checks": [
+    "binary masks",
+    "NIfTI grid and affine",
+    "every PNG pixel",
+    "crop coordinates",
+    "file counts"
+  ],
+  "scope": "Export integrity only; not anatomical accuracy validation."
+}

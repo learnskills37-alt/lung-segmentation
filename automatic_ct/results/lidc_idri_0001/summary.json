@@ -1,0 +1,31 @@
+{
+  "dataset": "LIDC-IDRI",
+  "case": "LIDC-IDRI-0001",
+  "patients_processed": 1,
+  "shape_xyz": [
+    512,
+    512,
+    133
+  ],
+  "reference_whole_lung_mask": null,
+  "accuracy_metrics": null,
+  "accuracy_note": "No independent whole-lung reference mask; nodule annotations are not whole-lung labels.",
+  "models": {
+    "unet": {
+      "model": "lungmask R231: 2D U-Net",
+      "mask_pngs": 133,
+      "lung_region_pngs": 133,
+      "cropped_pngs": 105,
+      "predicted_lung_volume_ml": 3706.41,
+      "export_integrity": "passed"
+    },
+    "nnunet": {
+      "model": "TotalSegmentator: 3D nnU-Net, 3 mm fast model",
+      "mask_pngs": 133,
+      "lung_region_pngs": 133,
+      "cropped_pngs": 105,
+      "predicted_lung_volume_ml": 3681.87,
+      "export_integrity": "passed"
+    }
+  }
+}
